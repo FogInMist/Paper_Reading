@@ -83,6 +83,7 @@ if __name__ == '__main__':
     
     num_edge_type = len(A)
     node_features = torch.from_numpy(node_features).type(torch.cuda.FloatTensor)
+
     if args.dataset == 'PPI':
         train_node = torch.from_numpy(nids[0]).type(torch.cuda.LongTensor)
         train_target = torch.from_numpy(labels[nids[0]]).type(torch.cuda.FloatTensor)
@@ -101,6 +102,7 @@ if __name__ == '__main__':
         test_target = torch.from_numpy(np.array(labels[2])[:,1]).type(torch.cuda.LongTensor)
         num_classes = np.max([torch.max(train_target).item(), torch.max(valid_target).item(), torch.max(test_target).item()])+1
         is_ppi = False
+
     final_f1, final_micro_f1 = [], []
     tmp = None
     runs = args.runs
@@ -134,6 +136,7 @@ if __name__ == '__main__':
                 for layer in range(args.num_FastGTN_layers):
                     model.fastGTNs[layer].layers = pre_trained_fastGTNs[layer]
 
+
         optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
 
         model.cuda()
@@ -150,6 +153,7 @@ if __name__ == '__main__':
         best_val_f1, best_micro_val_f1 = 0, 0
         best_test_f1, best_micro_test_f1 = 0, 0
         
+
         for i in range(epochs):
             # print('Epoch ',i)
             model.zero_grad()
@@ -171,6 +175,8 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
             model.eval()
+
+
             # Valid
             with torch.no_grad():
                 if args.model == 'FastGTN':
@@ -198,6 +204,8 @@ if __name__ == '__main__':
                     test_f1 = torch.mean(f1_score(torch.argmax(y_test,dim=1), test_target, num_classes=num_classes)).cpu().numpy()
                     sk_test_f1 = sk_f1_score(test_target.detach().cpu(), np.argmax(y_test.detach().cpu(), axis=1), average='micro')
                 # print('Test - Loss: {}, Macro_F1: {}, Micro_F1:{} \n'.format(test_loss.detach().cpu().numpy(), test_f1, sk_test_f1))
+
+
             if sk_val_f1 > best_micro_val_f1:
                 best_val_loss = val_loss.detach().cpu().numpy()
                 best_test_loss = test_loss.detach().cpu().numpy()
@@ -208,6 +216,7 @@ if __name__ == '__main__':
                 best_micro_train_f1 = sk_train_f1
                 best_micro_val_f1 = sk_val_f1
                 best_micro_test_f1 = sk_test_f1
+
         if l == 0 and args.pre_train:
             continue
         print('Run {}'.format(l))
@@ -217,6 +226,7 @@ if __name__ == '__main__':
         print('Test - Loss: {:.4f}, Macro_F1: {:.4f}, Micro_F1: {:.4f}'.format(best_test_loss, best_test_f1, best_micro_test_f1))
         final_f1.append(best_test_f1)
         final_micro_f1.append(best_micro_test_f1)
+
 
     print('--------------------Final Result-------------------------')
     print('Test - Macro_F1: {:.4f}+{:.4f}, Micro_F1:{:.4f}+{:.4f}'.format(np.mean(final_f1), np.std(final_f1), np.mean(final_micro_f1), np.std(final_micro_f1)))
