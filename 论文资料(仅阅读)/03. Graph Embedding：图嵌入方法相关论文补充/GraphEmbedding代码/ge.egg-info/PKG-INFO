@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Name: ge
+Version: 0.0.0
+Home-page: https://github.com/shenweichen/GraphEmbedding
+Author: Weichen Shen
+Author-email: weichenswc@163.com
+License: MIT license
+Requires-Python: >=3.5
+Provides-Extra: cpu
+Provides-Extra: gpu
+License-File: LICENSE

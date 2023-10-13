@@ -1,0 +1,16 @@
+gensim>=4.0.0
+networkx
+joblib
+fastdtw
+tqdm
+numpy
+scikit-learn
+pandas
+matplotlib
+deepctr
+
+[cpu]
+tensorflow!=1.7.*,!=1.8.*,>=1.4.0
+
+[gpu]
+tensorflow-gpu!=1.7.*,!=1.8.*,>=1.4.0
