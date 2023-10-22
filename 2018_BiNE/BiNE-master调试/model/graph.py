@@ -221,6 +221,7 @@ class Graph(defaultdict):
   #       break
   #   return path
 
+  # 开始进行随机游走，单个节点单次路径
   def random_walk_restart(self, nodes, percentage, alpha=0, rand=random.Random(), start=None):
     """ Returns a truncated random walk.
         percentage: probability of stopping walking
@@ -229,16 +230,16 @@ class Graph(defaultdict):
     """
     G = self
     if start:
-      path = [start]
+      path = [start] # 初始节点
     else:
       # Sampling is uniform w.r.t V, and not w.r.t E
       path = [rand.choice(nodes)]
 
-    while len(path) < 1 or random.random() > percentage:
-      cur = path[-1]
-      if len(G[cur]) > 0:
+    while len(path) < 1 or random.random() > percentage: # 长度小于1 或者 没有达到随机游走停止的概率
+      cur = path[-1] # 取出当前节点
+      if len(G[cur]) > 0: # 节点的邻居
         if rand.random() >= alpha:
-          add_node = rand.choice(G[cur])
+          add_node = rand.choice(G[cur]) # 随机选择一个邻居节点
           while add_node == cur:
             add_node = rand.choice(G[cur])
           path.append(add_node)
@@ -246,7 +247,7 @@ class Graph(defaultdict):
           path.append(path[0])
       else:
         break
-    return path
+    return path # 返回随机游走路径
       # neighbors = []
       # for n in G[cur]:
       #   neighbors.extend(G[n])
@@ -319,13 +320,13 @@ def build_deepwalk_corpus_random(G, hits_dict, percentage, maxT, minT, alpha=0, 
   walks = []
   nodes = list(G.nodes())
   for node in nodes:
-    num_paths = max(int(math.ceil(maxT * hits_dict[node])),minT)
+    num_paths = max(int(math.ceil(maxT * hits_dict[node])),minT) # 计算每个节点随机游走的次数
     # print num_paths,
     for cnt in range(num_paths):
-     walks.append(G.random_walk_restart(nodes, percentage,rand=rand, alpha=alpha, start=node))
+     walks.append(G.random_walk_restart(nodes, percentage,rand=rand, alpha=alpha, start=node)) # 获得一个类别的随机游走序列
 
-  random.shuffle(walks)
-  return walks
+  random.shuffle(walks) # 打乱顺序
+  return walks # 返回一个类别的随机游走序列
 
 def build_deepwalk_corpus_random_for_large_bibartite_graph(G, hits_dict, percentage, maxT, minT, alpha=0, rand = random.Random(), node_type='u'):
   walks = []

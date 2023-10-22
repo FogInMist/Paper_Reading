@@ -21,13 +21,14 @@ def construct_lsh(obj_dict):
     return lsh_0,lsh_5, keys, ms
 
 def get_negs_by_lsh(user_dict, item_dict, num_negs):
-    sample_num_u = max(300, int(len(user_dict)*0.01*num_negs))
-    sample_num_v = max(300, int(len(item_dict)*0.01*num_negs))
-    negs_u = call_get_negs_by_lsh(sample_num_u,user_dict)
-    negs_v = call_get_negs_by_lsh(sample_num_v,item_dict)
+    sample_num_u = max(300, int(len(user_dict)*0.01*num_negs)) # u类别节点的负采样数600
+    sample_num_v = max(300, int(len(item_dict)*0.01*num_negs)) # v类别节点的负采样数300
+
+    negs_u = call_get_negs_by_lsh(sample_num_u,user_dict) # u类别节点的负采样工作实现
+    negs_v = call_get_negs_by_lsh(sample_num_v,item_dict) # v类别节点的负采样工作实现
     return negs_u,negs_v
 
-def call_get_negs_by_lsh(sample_num, obj_dict):
+def call_get_negs_by_lsh(sample_num, obj_dict): # 负采样实现
     lsh_0,lsh_5, keys, ms = construct_lsh(obj_dict)
     visited = []
     negs_dict = {}
@@ -53,4 +54,5 @@ def call_get_negs_by_lsh(sample_num, obj_dict):
         for j in record:
             key = keys[j]
             negs_dict[key] = total_list
+
     return negs_dict
