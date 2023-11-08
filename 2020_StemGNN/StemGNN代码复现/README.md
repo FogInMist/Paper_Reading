@@ -1,3 +1,5 @@
+* [源仓库地址](https://github.com/microsoft/StemGNN)
+
 # Spectral Temporal Graph Neural Network for Multivariate Time-series Forecasting
 
 This repository is the official implementation of Spectral Temporal Graph Neural Network for
