@@ -4,7 +4,7 @@
 然而，负（否定）链接与正链接相比，它不仅具有不同的语义，其在原理和本质上也是不同的，并且它与正链接之间还形成了复杂的关系。因此，SGCN的目的是如何有效处理符号图中的上述这些问题，以便更好的学习到图中的节点表征。**
 
 **相关论文解读1：**
-* [SGCN_bilibili](https://www.bilibili.com/video/BV1Lh411L7i6)
+* [SGCN_bilibili](https://www.bilibili.com/video/BV1Lh411L7i6?p=29)
 
 **相关论文解读2：**
 * [SGCN_知乎](https://zhuanlan.zhihu.com/p/604615707)
