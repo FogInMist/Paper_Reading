@@ -6,6 +6,6 @@ SiGAT提出了一种新颖的方法去寻找节点的邻居:
   3. **最后，使用了GAT的方法去解决邻居聚合的问题。**
 
 **相关论文解读：**
-* [SiGAT_bilibili](https://www.bilibili.com/video/BV1Lh411L7i6)
+* [SiGAT_bilibili](https://www.bilibili.com/video/BV1Lh411L7i6?p=31)
 
 
