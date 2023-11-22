@@ -9,3 +9,6 @@
 
 **相关论文解读2：**
 * [DynGEM_CSDN](https://blog.csdn.net/xjxtx1985/article/details/106101666)
+
+**相关论文解读3：**
+* [DynGEM_知乎](https://zhuanlan.zhihu.com/p/114766774)
