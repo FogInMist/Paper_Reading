@@ -57,6 +57,7 @@ if __name__ == '__main__':
             _, normalize_statistic = train(train_data, valid_data, args, result_train_file)
             after_train = datetime.now().timestamp()
             print(f'Training took {(after_train - before_train) / 60} minutes')
+            
         except KeyboardInterrupt:
             print('-' * 99)
             print('Exiting from training early')

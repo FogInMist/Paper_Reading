@@ -54,12 +54,12 @@ class ForecastDataset(torch_data.Dataset):
             self.data, _ = normalized(self.data, normalize_method, norm_statistic)
 
     def __getitem__(self, index):
-        hi = self.x_end_idx[index]
+        hi = self.x_end_idx[index] 
         lo = hi - self.window_size
         train_data = self.data[lo: hi]
         target_data = self.data[hi:hi + self.horizon]
-        x = torch.from_numpy(train_data).type(torch.float)
-        y = torch.from_numpy(target_data).type(torch.float)
+        x = torch.from_numpy(train_data).type(torch.float) # torch.size([12,140])
+        y = torch.from_numpy(target_data).type(torch.float) # torch.size([3,140])
         return x, y
 
     def __len__(self):
@@ -68,6 +68,6 @@ class ForecastDataset(torch_data.Dataset):
     def get_x_end_idx(self):
         # each element `hi` in `x_index_set` is an upper bound for get training data
         # training data range: [lo, hi), lo = hi - window_size
-        x_index_set = range(self.window_size, self.df_length - self.horizon + 1)
+        x_index_set = range(self.window_size, self.df_length - self.horizon + 1) # 索引
         x_end_idx = [x_index_set[j * self.interval] for j in range((len(x_index_set)) // self.interval)]
         return x_end_idx

@@ -101,15 +101,17 @@ def validate(model, dataloader, device, normalize_method, statistic,
 
 
 def train(train_data, valid_data, args, result_file):
-    node_cnt = train_data.shape[1]
-    model = Model(node_cnt, 2, args.window_size, args.multi_layer, horizon=args.horizon)
+    node_cnt = train_data.shape[1] # 140
+    model = Model(node_cnt, 2, args.window_size, args.multi_layer, horizon=args.horizon) # 模型定义
     model.to(args.device)
+
     if len(train_data) == 0:
         raise Exception('Cannot organize enough training data')
     if len(valid_data) == 0:
         raise Exception('Cannot organize enough validation data')
 
-    if args.norm_method == 'z_score':
+    # 数据归一化
+    if args.norm_method == 'z_score': 
         train_mean = np.mean(train_data, axis=0)
         train_std = np.std(train_data, axis=0)
         normalize_statistic = {"mean": train_mean.tolist(), "std": train_std.tolist()}
@@ -123,21 +125,25 @@ def train(train_data, valid_data, args, result_file):
         with open(os.path.join(result_file, 'norm_stat.json'), 'w') as f:
             json.dump(normalize_statistic, f)
 
+    # 优化器设置
     if args.optimizer == 'RMSProp':
         my_optim = torch.optim.RMSprop(params=model.parameters(), lr=args.lr, eps=1e-08)
     else:
         my_optim = torch.optim.Adam(params=model.parameters(), lr=args.lr, betas=(0.9, 0.999))
     my_lr_scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer=my_optim, gamma=args.decay_rate)
 
+    # 训练集，测试集，验证集划分预处理(自定义)
     train_set = ForecastDataset(train_data, window_size=args.window_size, horizon=args.horizon,
                                 normalize_method=args.norm_method, norm_statistic=normalize_statistic)
     valid_set = ForecastDataset(valid_data, window_size=args.window_size, horizon=args.horizon,
                                 normalize_method=args.norm_method, norm_statistic=normalize_statistic)
+    
+    #放到数据加载器DataLoader中
     train_loader = torch_data.DataLoader(train_set, batch_size=args.batch_size, drop_last=False, shuffle=True,
                                          num_workers=0)
     valid_loader = torch_data.DataLoader(valid_set, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
-    forecast_loss = nn.MSELoss(reduction='mean').to(args.device)
+    forecast_loss = nn.MSELoss(reduction='mean').to(args.device) # 预测目标的损失函数
 
     total_params = 0
     for name, parameter in model.named_parameters():
@@ -146,27 +152,33 @@ def train(train_data, valid_data, args, result_file):
         total_params += param
     print(f"Total Trainable Params: {total_params}")
 
-    best_validate_mae = np.inf
-    validate_score_non_decrease_count = 0
+    best_validate_mae = np.inf # 最佳平均绝对误差
+    validate_score_non_decrease_count = 0 
     performance_metrics = {}
     for epoch in range(args.epoch):
-        epoch_start_time = time.time()
+
+        epoch_start_time = time.time() # 训练开始时间
         model.train()
-        loss_total = 0
-        cnt = 0
+        loss_total = 0 # 每轮的总损失
+        cnt = 0 # batch次数
+
         for i, (inputs, target) in enumerate(train_loader):
+            # input shape and output shape
+            # torch.size([32, 12, 140]) ; torch.size([32, 3, 140])
             inputs = inputs.to(args.device)
             target = target.to(args.device)
             model.zero_grad()
             forecast, _ = model(inputs)
-            loss = forecast_loss(forecast, target)
+            loss = forecast_loss(forecast, target) # 计算损失
             cnt += 1
-            loss.backward()
-            my_optim.step()
-            loss_total += float(loss)
+            loss.backward() # 反向传播计算
+            my_optim.step() # 梯度更新
+            loss_total += float(loss) # 损失累积
+
         print('| end of epoch {:3d} | time: {:5.2f}s | train_total_loss {:5.4f}'.format(epoch, (
                 time.time() - epoch_start_time), loss_total / cnt))
         save_model(model, result_file, epoch)
+
         if (epoch+1) % args.exponential_decay_step == 0:
             my_lr_scheduler.step()
         if (epoch + 1) % args.validate_freq == 0:
@@ -185,9 +197,11 @@ def train(train_data, valid_data, args, result_file):
             # save model
             if is_best_for_now:
                 save_model(model, result_file)
+
         # early stop
         if args.early_stop and validate_score_non_decrease_count >= args.early_stop_step:
             break
+
     return performance_metrics, normalize_statistic
 
 
