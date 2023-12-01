@@ -189,5 +189,6 @@ class Classifier(torch.nn.Module):
                                        torch.nn.Linear(in_features = args.gcn_parameters['cls_feats'],
                                                        out_features = out_features))  # 两层全连接分类器
 
+
     def forward(self,x):
         return self.mlp(x)

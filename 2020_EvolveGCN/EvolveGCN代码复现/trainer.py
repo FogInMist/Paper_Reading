@@ -7,6 +7,15 @@ import numpy as np
 
 class Trainer():
 	def __init__(self,args, splitter, gcn, classifier, comp_loss, dataset, num_classes):
+		'''
+		args: 全局参数
+        splitter: 训练，测试，验证集划分
+        gcn: Evolve_GCN模型
+		classifier:  # link_pred分类器
+		comp_loss: loss函数
+		dataset: dataset数据集
+		num_classes: 2分类
+		'''
 		self.args = args
 		self.splitter = splitter
 		self.tasker = splitter.tasker

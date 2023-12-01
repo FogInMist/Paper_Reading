@@ -25,6 +25,7 @@ class Link_Pred_Tasker():
 	There's a test difference in the behavior, on test (or development), the number of sampled non existing 
 	edges should be higher.
 	'''
+
 	def __init__(self,args,dataset):
 		self.data = dataset
 		# max_time for link pred should be one before
@@ -36,6 +37,7 @@ class Link_Pred_Tasker():
 			self.feats_per_node = dataset.feats_per_node
 
 		self.get_node_feats = self.build_get_node_feats(args,dataset)  # 构建节点特征
+		
 		self.prepare_node_feats = self.build_prepare_node_feats(args,dataset)  # 节点数据预处理（格式转换）
 		self.is_static = False
 		
@@ -94,6 +96,7 @@ class Link_Pred_Tasker():
 											  max_deg_out,
 											  max_deg_in,
 											  dataset.num_nodes)
+			
 		elif args.use_1_hot_node_feats:  # one-hot构建特征;
 			max_deg,_ = tu.get_max_degs(args,dataset)  # 计算节点最大出度，入度
 			self.feats_per_node = max_deg  # 节点特征就是degree数量; degree数量的one-hot矩阵

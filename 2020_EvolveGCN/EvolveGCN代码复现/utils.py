@@ -125,7 +125,7 @@ def load_data_from_tar(file, tar_archive, replace_unknow=False, starting_line=1,
     #print (file,'data size', data.size())
     return data
 
-def create_parser():
+def create_parser(): # 创建参数解析器
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--config_file',default='experiments/parameters_example.yaml', type=argparse.FileType(mode='r'), help='optional, yaml file containing parameters to be used, overrides command line parameters')
     
@@ -135,9 +135,10 @@ def create_parser():
 def parse_args(parser):
     # args = parser.parse_args()
     args = parser.parse_args(args=[])
+    print(args.config_file)
     if args.config_file:
-        data = yaml.load(args.config_file)
-        delattr(args, 'config_file')
+        data = yaml.safe_load(args.config_file)
+        delattr(args, 'config_file') # 删除对象
         # print(data)
         arg_dict = args.__dict__
         for key, value in data.items():
@@ -148,15 +149,19 @@ def parse_args(parser):
     args.num_hist_steps = random_param_value(args.num_hist_steps, args.num_hist_steps_min, args.num_hist_steps_max, type='int')
     args.gcn_parameters['feats_per_node'] =random_param_value(args.gcn_parameters['feats_per_node'], args.gcn_parameters['feats_per_node_min'], args.gcn_parameters['feats_per_node_max'], type='int')
     args.gcn_parameters['layer_1_feats'] =random_param_value(args.gcn_parameters['layer_1_feats'], args.gcn_parameters['layer_1_feats_min'], args.gcn_parameters['layer_1_feats_max'], type='int')
+    
     if args.gcn_parameters['layer_2_feats_same_as_l1'] or args.gcn_parameters['layer_2_feats_same_as_l1'].lower()=='true':
         args.gcn_parameters['layer_2_feats'] = args.gcn_parameters['layer_1_feats']
     else:
         args.gcn_parameters['layer_2_feats'] =random_param_value(args.gcn_parameters['layer_2_feats'], args.gcn_parameters['layer_1_feats_min'], args.gcn_parameters['layer_1_feats_max'], type='int')
+    
     args.gcn_parameters['lstm_l1_feats'] =random_param_value(args.gcn_parameters['lstm_l1_feats'], args.gcn_parameters['lstm_l1_feats_min'], args.gcn_parameters['lstm_l1_feats_max'], type='int')
+    
     if args.gcn_parameters['lstm_l2_feats_same_as_l1'] or args.gcn_parameters['lstm_l2_feats_same_as_l1'].lower()=='true':
         args.gcn_parameters['lstm_l2_feats'] = args.gcn_parameters['lstm_l1_feats']
     else:
         args.gcn_parameters['lstm_l2_feats'] =random_param_value(args.gcn_parameters['lstm_l2_feats'], args.gcn_parameters['lstm_l1_feats_min'], args.gcn_parameters['lstm_l1_feats_max'], type='int')
+    
     args.gcn_parameters['cls_feats'] =random_param_value(args.gcn_parameters['cls_feats'], args.gcn_parameters['cls_feats_min'], args.gcn_parameters['cls_feats_max'], type='int')
 
     return args

@@ -12,7 +12,6 @@ class splitter():
     '''
     def __init__(self,args,tasker):
         
-        
         if tasker.is_static: #### For static datsets
             assert args.train_proportion + args.dev_proportion < 1, \
                 'there\'s no space for test samples'
