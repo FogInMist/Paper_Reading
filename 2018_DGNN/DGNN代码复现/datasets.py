@@ -18,5 +18,9 @@ class Temporal_Dataset(Dataset):
 	def __getitem__(self,idx):
 		sample = self.data[idx,:]
 		return sample
+	
+	def node_num(self):
+		return int(max(max(self.data[:,0])+1,max(self.data[:,1])+1))
+
 
 

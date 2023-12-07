@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch.nn import init
 from decayer import Decayer
 
-class TLSTM(nn.Module):
+class TLSTM(nn.Module): # LSTM实现
 	def __init__(self,input_size, hidden_size,  bias = True):
 		super(TLSTM,self).__init__()
 		self.i2h = nn.Linear(input_size, 4*hidden_size, bias)  # update中LSTM参数

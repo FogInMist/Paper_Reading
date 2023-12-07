@@ -14,6 +14,7 @@ class Combiner(nn.Module):
 		else:
 			self.act = nn.ReLU() 
 
+
 	def forward(self, head_info, tail_info):
 		node_output = self.h2o(head_info) + self.l2o(tail_info)  # Ws*Hs + Wg*Hg
 		node_output_tanh = self.act(node_output)

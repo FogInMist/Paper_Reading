@@ -13,11 +13,6 @@ import os
 import time
 from nc import Node_classification
 
-
-
-
-
-
 def get_loss(data, head_reps, tail_reps,device):
 
     head_list = list(data[:,0])

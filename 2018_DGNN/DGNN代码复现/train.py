@@ -201,17 +201,6 @@ def get_ranks(test_data,head_reps, tail_reps, device, head_node2candidate, tail_
 
     return head_ranks, tail_ranks, head_lengths, tail_lengths
 
-
-
-
-
-
-
-
-
-
-
-
 def train(args, data, num_nodes, model_save_dir):
     batch_size = args.batch_size
     learning_rate = args.learning_rate

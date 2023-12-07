@@ -15,14 +15,14 @@ class Decayer(nn.Module):
     def log_decay(self, delta_t):
         return 1/torch.log(2.7183 + self.w*delta_t)
     def rev_decay(self, delta_t):
-        return 1/(1 + self.w*delta_t)
+        return 1/(1 + self.w*delta_t) # w = 2
 
     def forward(self,delta_t):
 
         if self.decay_method == 'exp':
             return self.exponetial_decay(delta_t)
         elif self.decay_method == 'log':
-            return self.log_decay(delta_t)
+            return self.log_decay(delta_t) # log递减函数
         elif self.decay_method == 'rev':
             return self.rev_decay(delta_t)
 
