@@ -1,3 +1,5 @@
+* [源仓库地址](https://github.com/iMoonLab/HGNN)
+
 ## Hypergraph Neural Networks
 Created by Yifan Feng, Haoxuan You, Zizhao Zhang, Rongrong, Ji, Yue Gao from Xiamen University and Tsinghua University.
 

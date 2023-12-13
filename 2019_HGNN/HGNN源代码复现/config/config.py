@@ -18,7 +18,7 @@ def get_config(dir='config/config.yaml'):
     yaml.add_constructor('!join', join)
     yaml.add_constructor('!concat', concat)
     with open(dir, 'r') as f:
-        cfg = yaml.load(f)
+        cfg = yaml.load(f,Loader=yaml.FullLoader)
 
     check_dirs(cfg)
 
