@@ -6,6 +6,7 @@ import torch
 
 def load_adj(dataset_name):
     dataset_path = './data'
+    # current_dir = os.getcwd()
     dataset_path = os.path.join(dataset_path, dataset_name)
     adj = sp.load_npz(os.path.join(dataset_path, 'adj.npz'))
     adj = adj.tocsc()
